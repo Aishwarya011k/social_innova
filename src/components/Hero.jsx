@@ -1,50 +1,113 @@
 import React from 'react';
-import { Typewriter } from 'react-simple-typewriter';
 import { useNavigate } from 'react-router-dom';
+import { FaHandHoldingHeart, FaRoute, FaUsers, FaInfoCircle } from 'react-icons/fa';
 import { heroImg } from '../assets';
-import { motion } from "framer-motion";
+
 const Hero = () => {
   const navigate = useNavigate();
-
+  
   return (
-    <section className="min-h-[calc(100vh-4rem)] w-full flex flex-col lg:flex-row items-center justify-between px-4 py-8 lg:py-0">
-      {/* Text Content (40%) */}
-      <div className="w-full lg:w-[40%] space-y-6 text-left z-10">
-        <h1 className="font-poppins text-3xl md:text-4xl lg:text-5xl font-bold text-[#F7E6D5] leading-tight">
-          Introducing!, <span className="text-4xl md:text-5xl lg:text-6xl text-[#E7C7BC]"><Typewriter words={["Heart2Hand"]} loop cursor cursorStyle="|" /></span>
-        </h1>
-        <p className="font-poppins text-lg text-[#F7E6D5] leading-relaxed max-w-xl">
-          At Heart2Hand, we believe that small acts of kindness can change lives. Our mission is to connect generous donors with those in need by making clothing donations simple, accessible, and impactful.
-        </p>
-        <div className="flex gap-4 pt-4">
-          <button
-            onClick={() => navigate('/about')}
-            className="px-8 py-3 bg-[#D66D55] text-white rounded-lg hover:bg-[#A64B39] transition font-semibold"
-          >
-            Start Donating
-          </button>
-          <button className="px-6 py-3 border border-[#E7C7BC] text-[#F7E6D5] font-semibold rounded-lg hover:bg-[#D66D55]/10 transition">
-            View Documentation
-          </button>
+    <div className="relative min-h-screen flex items-center">
+      {/* Background Image with Gradient Overlay */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src={heroImg}
+          alt="Background"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#03045E] via-[#0077B6]/90 to-transparent"></div>
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 max-w-6xl mx-auto px-4 py-16">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-8">
+            <h1 className="text-5xl font-bold text-[#CAF0F8] leading-tight">
+              Make a Difference <br />
+              <span className="text-[#48CAE4]">One Donation</span> at a Time
+            </h1>
+            
+            <p className="text-xl text-[#90E0EF] max-w-lg">
+              Join our community of givers and receivers. Together, we can create 
+              meaningful impact through thoughtful donations.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button
+                onClick={() => navigate('/donate')}
+                className="btn-primary flex items-center justify-center gap-2"
+              >
+                <FaHandHoldingHeart className="w-5 h-5" />
+                Start Donating
+              </button>
+              <button
+                onClick={() => navigate('/about')}
+                className="btn-outlined flex items-center justify-center gap-2"
+              >
+                <FaInfoCircle className="w-5 h-5" />
+                Learn More
+              </button>
+            </div>
+          </div>
+
+          {/* Stats Card */}
+          <div className="card p-8 backdrop-blur-md">
+            <h2 className="text-2xl font-bold text-[#CAF0F8] mb-6">Our Impact</h2>
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <div className="text-3xl font-bold text-[#00B4D8] mb-2">1000+</div>
+                <p className="text-[#90E0EF]">Active Donors</p>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-[#00B4D8] mb-2">5000+</div>
+                <p className="text-[#90E0EF]">Items Donated</p>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-[#00B4D8] mb-2">500+</div>
+                <p className="text-[#90E0EF]">Recipients Helped</p>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-[#00B4D8] mb-2">50+</div>
+                <p className="text-[#90E0EF]">Active Communities</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Features Section */}
+        <div className="mt-24 grid md:grid-cols-3 gap-8">
+          <div className="card p-6 hover:scale-105 transition-transform">
+            <div className="w-12 h-12 rounded-full bg-[#00B4D8]/20 flex items-center justify-center mb-4">
+              <FaHandHoldingHeart className="w-6 h-6 text-[#00B4D8]" />
+            </div>
+            <h3 className="text-xl font-semibold text-[#CAF0F8] mb-2">Easy Donations</h3>
+            <p className="text-[#90E0EF]">
+              Simple and streamlined process to make your donations count.
+            </p>
+          </div>
+
+          <div className="card p-6 hover:scale-105 transition-transform">
+            <div className="w-12 h-12 rounded-full bg-[#00B4D8]/20 flex items-center justify-center mb-4">
+              <FaRoute className="w-6 h-6 text-[#00B4D8]" />
+            </div>
+            <h3 className="text-xl font-semibold text-[#CAF0F8] mb-2">Track Impact</h3>
+            <p className="text-[#90E0EF]">
+              Follow your donation's journey from start to finish.
+            </p>
+          </div>
+
+          <div className="card p-6 hover:scale-105 transition-transform">
+            <div className="w-12 h-12 rounded-full bg-[#00B4D8]/20 flex items-center justify-center mb-4">
+              <FaUsers className="w-6 h-6 text-[#00B4D8]" />
+            </div>
+            <h3 className="text-xl font-semibold text-[#CAF0F8] mb-2">Community First</h3>
+            <p className="text-[#90E0EF]">
+              Connect with others who share your vision for change.
+            </p>
+          </div>
         </div>
       </div>
-       <motion.div
-  className="flex-1 max-w-md mt-10 md:mt-0 md:ml-12 rounded-lg overflow-hidden shadow-lg cursor-pointer"
-  style={{ maxHeight: 490 }}  // limit height to 300px
-  initial={{ opacity: 0, scale: 0.9 }}
-  animate={{ opacity: 1, scale: 1 }}
-  transition={{ duration: 0.8, ease: "easeOut" }}
-  whileHover={{ scale: 1.05, boxShadow: "0 15px 30px rgba(214, 109, 85, 0.4)" }}
->
-  <img
-    src={heroImg}
-    alt="Hero Visual"
-    className="w-full h-full object-contain rounded-lg"
-    draggable={false}
-  />
-</motion.div>
-
-    </section>
+    </div>
   );
 };
 

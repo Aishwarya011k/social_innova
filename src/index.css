@@ -1,6 +1,16 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
+  --navy-blue: #03045E;
+  --ocean-blue: #0077B6;
+  --bright-cyan: #00B4D8;
+  --sky-blue: #48CAE4;
+  --light-cyan: #90E0EF;
+  --ice-blue: #CAF0F8;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -17,12 +27,160 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #030712;
-  color: #f3f4f6;
+  background: linear-gradient(135deg, var(--navy-blue), var(--ocean-blue));
+  color: var(--ice-blue);
 }
 
+/* Common Button Styles */
+button {
+  border-radius: 0.25rem;
+  transition: all 0.2s;
+}
 
-/* ...rest of existing styles... */
+.btn-primary {
+  background-color: var(--bright-cyan);
+  color: var(--ice-blue);
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 180, 216, 0.1);
+}
+
+.btn-primary:hover {
+  background-color: var(--ocean-blue);
+  box-shadow: 0 4px 6px rgba(0, 180, 216, 0.2);
+}
+
+.btn-secondary {
+  border: 1px solid var(--bright-cyan);
+  color: var(--bright-cyan);
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(0, 180, 216, 0.1);
+}
+
+.btn-outlined {
+  border: 1px solid var(--sky-blue);
+  color: var(--ice-blue);
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+}
+
+.btn-outlined:hover {
+  background-color: rgba(0, 180, 216, 0.1);
+}
+
+.btn-icon {
+  padding: 0.5rem;
+  border-radius: 9999px;
+  background-color: var(--bright-cyan);
+  color: var(--ice-blue);
+  box-shadow: 0 1px 3px rgba(0, 180, 216, 0.1);
+}
+
+.btn-icon:hover {
+  background-color: var(--ocean-blue);
+  box-shadow: 0 4px 6px rgba(0, 180, 216, 0.2);
+}
+
+.btn-text {
+  color: var(--bright-cyan);
+  font-weight: 600;
+}
+
+.btn-text:hover {
+  color: var(--sky-blue);
+}
+
+/* Interactive Element Styles */
+.input-field {
+  background-color: var(--navy-blue);
+  border: 1px solid rgba(0, 180, 216, 0.3);
+  color: var(--ice-blue);
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+}
+
+.input-field:focus {
+  border-color: var(--sky-blue);
+  box-shadow: 0 0 0 1px var(--sky-blue);
+  outline: none;
+}
+
+.input-field::placeholder {
+  color: var(--light-cyan);
+  opacity: 0.7;
+}
+
+.select-field {
+  background-color: var(--navy-blue);
+  border: 1px solid rgba(0, 180, 216, 0.3);
+  color: var(--ice-blue);
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+}
+
+.select-field:focus {
+  border-color: var(--sky-blue);
+  box-shadow: 0 0 0 1px var(--sky-blue);
+  outline: none;
+}
+
+.link {
+  color: var(--bright-cyan);
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.link:hover {
+  color: var(--sky-blue);
+}
+
+.card {
+  background-color: rgba(3, 4, 94, 0.4);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(0, 180, 216, 0.2);
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 180, 216, 0.1);
+  transition: all 0.3s;
+}
+
+.card:hover {
+  border-color: rgba(0, 180, 216, 0.4);
+}
+
+/* Interactive States */
+.hover-glow:hover {
+  box-shadow: 0 0 15px rgba(0, 180, 216, 0.3);
+}
+
+.active-glow {
+  box-shadow: 0 0 20px rgba(0, 180, 216, 0.4);
+}
+
+/* Loading Animation */
+.animate-spin {
+  border-color: var(--ice-blue);
+  border-top-color: transparent;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
 
 @media (prefers-color-scheme: light) {
   :root {
