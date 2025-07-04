@@ -119,6 +119,12 @@ const DonationTracker = ({ donation, onStatusUpdate }) => {
   );
 };
 
+const getUserRequests = (user) => {
+  if (!user) return [];
+  const allRequests = JSON.parse(localStorage.getItem('assistance_requests') || '[]');
+  return allRequests.filter(r => r.userId === user.id);
+};
+
 const RecipientForm = () => {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -171,11 +177,11 @@ const RecipientForm = () => {
 
   if (showSuccess) {
     return (
-      <div className="bg-[#03045E]/30 backdrop-blur-md p-8 rounded-xl border border-[#00B4D8]/30">
+            <div className="bg-[#48CAE4]/30 backdrop-blur-md p-8 rounded-xl border border-[#90E0EF]/40">
         <div className="text-center">
           <FaCheckCircle className="w-16 h-16 text-[#00B4D8] mx-auto mb-4" />
-          <h3 className="text-2xl font-semibold text-[#CAF0F8] mb-2">Request Submitted!</h3>
-          <p className="text-[#90E0EF]">We've received your request and will connect you with donors soon.</p>
+          <h3 className="text-2xl font-semibold text-[#03045E] mb-2">Request Submitted!</h3>
+          <p className="text-[#0077B6]">We've received your request and will connect you with donors soon.</p>
         </div>
       </div>
     );
@@ -185,7 +191,7 @@ const RecipientForm = () => {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-[#CAF0F8] text-sm font-medium mb-2" htmlFor="fullName">
+          <label className="block text-[#03045E] text-sm font-medium mb-2" htmlFor="fullName">
             Full Name
           </label>
           <input
@@ -195,7 +201,7 @@ const RecipientForm = () => {
             value={formData.fullName}
             onChange={handleChange}
             required
-            className="w-full bg-[#03045E]/30 border border-[#00B4D8]/30 rounded-lg px-4 py-2 text-[#CAF0F8] placeholder-[#90E0EF]/50 focus:outline-none focus:border-[#00B4D8]"
+            className="w-full bg-[#CAF0F8]/60 border border-[#90E0EF]/40 rounded-lg px-4 py-2 text-[#03045E] placeholder-[#0077B6]/50 focus:outline-none focus:border-[#00B4D8]"
             placeholder="Enter your full name"
           />
         </div>
@@ -210,7 +216,7 @@ const RecipientForm = () => {
             name="organization"
             value={formData.organization}
             onChange={handleChange}
-            className="w-full bg-[#03045E]/30 border border-[#00B4D8]/30 rounded-lg px-4 py-2 text-[#CAF0F8] placeholder-[#90E0EF]/50 focus:outline-none focus:border-[#00B4D8]"
+            className="w-full bg-[#CAF0F8]/60 border border-[#90E0EF]/40 rounded-lg px-4 py-2 text-[#03045E] placeholder-[#0077B6]/50 focus:outline-none focus:border-[#00B4D8]"
             placeholder="Enter organization name"
           />
         </div>
@@ -226,7 +232,7 @@ const RecipientForm = () => {
             value={formData.itemsNeeded}
             onChange={handleChange}
             required
-            className="w-full bg-[#03045E]/30 border border-[#00B4D8]/30 rounded-lg px-4 py-2 text-[#CAF0F8] placeholder-[#90E0EF]/50 focus:outline-none focus:border-[#00B4D8]"
+            className="w-full bg-[#CAF0F8]/60 border border-[#90E0EF]/40 rounded-lg px-4 py-2 text-[#03045E] placeholder-[#0077B6]/50 focus:outline-none focus:border-[#00B4D8]"
             placeholder="Enter items needed"
           />
         </div>
@@ -241,7 +247,7 @@ const RecipientForm = () => {
             value={formData.category}
             onChange={handleChange}
             required
-            className="w-full bg-[#03045E]/30 border border-[#00B4D8]/30 rounded-lg px-4 py-2 text-[#CAF0F8] placeholder-[#90E0EF]/50 focus:outline-none focus:border-[#00B4D8]"
+            className="w-full bg-[#CAF0F8]/60 border border-[#90E0EF]/40 rounded-lg px-4 py-2 text-[#03045E] placeholder-[#0077B6]/50 focus:outline-none focus:border-[#00B4D8]"
           >
             <option value="">Select a category</option>
             <option value="clothing">Clothing</option>
@@ -265,7 +271,7 @@ const RecipientForm = () => {
             onChange={handleChange}
             required
             min="1"
-            className="w-full bg-[#03045E]/30 border border-[#00B4D8]/30 rounded-lg px-4 py-2 text-[#CAF0F8] placeholder-[#90E0EF]/50 focus:outline-none focus:border-[#00B4D8]"
+            className="w-full bg-[#CAF0F8]/60 border border-[#90E0EF]/40 rounded-lg px-4 py-2 text-[#03045E] placeholder-[#0077B6]/50 focus:outline-none focus:border-[#00B4D8]"
             placeholder="Enter quantity"
           />
         </div>
@@ -280,7 +286,7 @@ const RecipientForm = () => {
             value={formData.urgencyLevel}
             onChange={handleChange}
             required
-            className="w-full bg-[#03045E]/30 border border-[#00B4D8]/30 rounded-lg px-4 py-2 text-[#CAF0F8] placeholder-[#90E0EF]/50 focus:outline-none focus:border-[#00B4D8]"
+            className="w-full bg-[#CAF0F8]/60 border border-[#90E0EF]/40 rounded-lg px-4 py-2 text-[#03045E] placeholder-[#0077B6]/50 focus:outline-none focus:border-[#00B4D8]"
           >
             <option value="">Select urgency level</option>
             <option value="low">Low - Within next 30 days</option>
@@ -301,7 +307,7 @@ const RecipientForm = () => {
             onChange={handleChange}
             required
             rows="2"
-            className="w-full bg-[#03045E]/30 border border-[#00B4D8]/30 rounded-lg px-4 py-2 text-[#CAF0F8] placeholder-[#90E0EF]/50 focus:outline-none focus:border-[#00B4D8]"
+            className="w-full bg-[#CAF0F8]/60 border border-[#90E0EF]/40 rounded-lg px-4 py-2 text-[#03045E] placeholder-[#0077B6]/50 focus:outline-none focus:border-[#00B4D8]"
             placeholder="Enter delivery address"
           />
         </div>
@@ -316,7 +322,7 @@ const RecipientForm = () => {
             value={formData.preferredDeliveryTime}
             onChange={handleChange}
             required
-            className="w-full bg-[#03045E]/30 border border-[#00B4D8]/30 rounded-lg px-4 py-2 text-[#CAF0F8] placeholder-[#90E0EF]/50 focus:outline-none focus:border-[#00B4D8]"
+            className="w-full bg-[#CAF0F8]/60 border border-[#90E0EF]/40 rounded-lg px-4 py-2 text-[#03045E] placeholder-[#0077B6]/50 focus:outline-none focus:border-[#00B4D8]"
           >
             <option value="">Select preferred time</option>
             <option value="morning">Morning (9AM - 12PM)</option>
@@ -337,7 +343,7 @@ const RecipientForm = () => {
             onChange={handleChange}
             required
             rows="4"
-            className="w-full bg-[#03045E]/30 border border-[#00B4D8]/30 rounded-lg px-4 py-2 text-[#CAF0F8] placeholder-[#90E0EF]/50 focus:outline-none focus:border-[#00B4D8]"
+            className="w-full bg-[#CAF0F8]/60 border border-[#90E0EF]/40 rounded-lg px-4 py-2 text-[#03045E] placeholder-[#0077B6]/50 focus:outline-none focus:border-[#00B4D8]"
             placeholder="Explain how these items will be used and who will benefit"
           />
         </div>
@@ -366,6 +372,20 @@ const RecipientForm = () => {
   );
 };
 
+const HeroSection = () => (
+  <section className="relative py-16 mb-12 bg-gradient-to-br from-[#03045E]/80 via-[#0077B6]/70 to-[#00B4D8]/60 rounded-3xl shadow-xl overflow-hidden">
+    <div className="absolute inset-0 bg-[url('/src/assets/heroImg.jpg')] bg-cover bg-center opacity-10" />
+    <div className="relative z-10 max-w-3xl mx-auto text-center">
+      <h1 className="text-4xl md:text-5xl font-extrabold text-[#CAF0F8] mb-4 drop-shadow-lg">Need Support? We're Here for You</h1>
+      <p className="text-lg md:text-xl text-[#90E0EF] mb-6">Browse available donations or submit a request. Our community is ready to help you thrive.</p>
+      <div className="flex justify-center gap-4">
+        <a href="#available-items" className="btn-primary px-8 py-3 text-lg">Browse Items</a>
+        <a href="#request-form" className="btn-secondary px-8 py-3 text-lg">Request Support</a>
+      </div>
+    </div>
+  </section>
+);
+
 const RecipientPage = () => {
   const { user } = useAuth();
   const [requestForm, setRequestForm] = useState({
@@ -382,10 +402,12 @@ const RecipientPage = () => {
   const [selectedDonation, setSelectedDonation] = useState(null);
   const [activeTab, setActiveTab] = useState('available');
   const [selectedItem, setSelectedItem] = useState(null);
+  const [userRequests, setUserRequests] = useState([]);
 
   useEffect(() => {
     loadDonations();
-  }, [user]);
+    setUserRequests(getUserRequests(user));
+  }, [user, showSuccess]);
 
   const loadDonations = () => {
     const allDonations = JSON.parse(localStorage.getItem('donations') || '[]');
@@ -534,139 +556,116 @@ const RecipientPage = () => {
   ];
 
   return (
-    <div className="min-h-screen py-16 px-4 bg-gradient-to-br from-[#03045E] via-[#0077B6] to-[#00B4D8]">
+    <div className="min-h-screen py-8 px-2 md:px-4 bg-gradient-to-br from-[#03045E] via-[#0077B6] to-[#00B4D8]">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl font-bold text-[#CAF0F8] mb-4">Available Donations</h1>
-          <p className="text-[#90E0EF] max-w-2xl mx-auto">
-            Browse through available items and request what you need. We'll connect you 
-            with donors in your area.
-          </p>
-        </div>
+        <HeroSection />
 
-        {/* Tabs */}
-        <div className="flex justify-center mb-8">
-          <div className="card p-1 inline-flex">
-            <button
-              onClick={() => setActiveTab('available')}
-              className={`px-6 py-2 rounded-lg ${
-                activeTab === 'available'
-                  ? 'bg-[#00B4D8] text-[#CAF0F8]'
-                  : 'text-[#90E0EF] hover:bg-[#00B4D8]/10'
-              }`}
-            >
-              Available Items
-            </button>
-            <button
-              onClick={() => setActiveTab('requests')}
-              className={`px-6 py-2 rounded-lg ${
-                activeTab === 'requests'
-                  ? 'bg-[#00B4D8] text-[#CAF0F8]'
-                  : 'text-[#90E0EF] hover:bg-[#00B4D8]/10'
-              }`}
-            >
-              My Requests
-            </button>
+        {/* Available Donations Section */}
+        <section id="available-items" className="mb-16">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-[#CAF0F8] mb-2">Available Donations</h2>
+            <p className="text-[#90E0EF] max-w-2xl mx-auto">
+              Browse through available items and request what you need. We'll connect you with donors in your area.
+            </p>
           </div>
-        </div>
 
-        {/* Items Grid */}
-        {activeTab === 'available' && (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {availableItems.map((item) => (
-              <div key={item.id} className="card p-6 hover:scale-105 transition-transform">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <span className="inline-block px-3 py-1 rounded-full text-sm bg-[#00B4D8]/20 text-[#CAF0F8] mb-2">
-                      {item.category}
-                    </span>
-                    <h3 className="text-lg font-semibold text-[#CAF0F8]">
-                      {item.description}
-                    </h3>
+          {/* Tabs */}
+          <div className="flex justify-center mb-8">
+            <div className="card p-1 inline-flex">
+              <button
+                onClick={() => setActiveTab('available')}
+                className={`px-6 py-2 rounded-lg ${activeTab === 'available' ? 'bg-[#00B4D8] text-[#CAF0F8]' : 'text-[#90E0EF] hover:bg-[#00B4D8]/10'}`}
+              >
+                Available Items
+              </button>
+              <button
+                onClick={() => setActiveTab('requests')}
+                className={`px-6 py-2 rounded-lg ${activeTab === 'requests' ? 'bg-[#00B4D8] text-[#CAF0F8]' : 'text-[#90E0EF] hover:bg-[#00B4D8]/10'}`}
+              >
+                My Requests
+              </button>
+            </div>
+          </div>
+
+          {/* Items Grid */}
+          {activeTab === 'available' && (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {availableItems.map((item) => (
+                <div key={item.id} className="card p-6 hover:scale-105 transition-transform shadow-lg border border-[#00B4D8]/30 bg-[#03045E]/40">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#00B4D8]/30 text-[#CAF0F8] mb-2 uppercase tracking-wide">
+                        {item.category}
+                      </span>
+                      <h3 className="text-lg font-bold text-[#CAF0F8]">{item.description}</h3>
+                    </div>
+                    <button onClick={() => setSelectedItem(item)} className="btn-icon">
+                      <FaInfoCircle />
+                    </button>
                   </div>
-                  <button 
-                    onClick={() => setSelectedItem(item)}
-                    className="btn-icon"
-                  >
-                    <FaInfoCircle />
+                  <div className="space-y-2 text-[#90E0EF] text-sm mb-4">
+                    <p>Condition: <span className="font-semibold text-[#CAF0F8]">{item.condition}</span></p>
+                    <p>Location: {item.location}</p>
+                    <p>Donor: {item.donor}</p>
+                  </div>
+                  <button onClick={() => setSelectedItem(item)} className="btn-primary w-full mt-2">
+                    Request Item
                   </button>
                 </div>
-                
-                <div className="space-y-2 text-[#90E0EF] text-sm mb-4">
-                  <p>Condition: {item.condition}</p>
-                  <p>Location: {item.location}</p>
-                  <p>Donor: {item.donor}</p>
-                </div>
+              ))}
+            </div>
+          )}
 
-                <button
-                  onClick={() => setSelectedItem(item)}
-                  className="btn-primary w-full"
-                >
-                  Request Item
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {activeTab === 'requests' && (
-          <div className="space-y-6">
-            {[1, 2, 3].map((request) => (
-              <div key={request} className="card p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-[#CAF0F8] mb-1">
-                      Request #{request}
-                    </h3>
-                    <p className="text-[#90E0EF]">Submitted on June 10, 2025</p>
+          {/* Requests Tab */}
+          {activeTab === 'requests' && (
+            <div className="space-y-6">
+              {userRequests.length === 0 ? (
+                <div className="text-center text-[#90E0EF]">No requests yet.</div>
+              ) : (
+                userRequests.map((request, idx) => (
+                  <div key={request.id} className="card p-6 border border-[#00B4D8]/30 bg-[#021B3A]/60">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <h3 className="text-lg font-semibold text-[#CAF0F8] mb-1">Request #{userRequests.length - idx}</h3>
+                        <p className="text-[#90E0EF]">Submitted on {new Date(request.createdAt).toLocaleDateString()}</p>
+                      </div>
+                      <span className="px-4 py-1 rounded-full text-sm bg-[#00B4D8]/20 text-[#CAF0F8] capitalize">{request.status.toLowerCase()}</span>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="flex items-center text-[#90E0EF]">
+                        <FaClipboardList className="w-5 h-5 mr-2" />
+                        <span>{request.needType || 'General Assistance'}</span>
+                      </div>
+                      <div className="flex items-center text-[#90E0EF]">
+                        <FaMapMarkerAlt className="w-5 h-5 mr-2" />
+                        <span>{request.preferredLocation || 'N/A'}</span>
+                      </div>
+                      <div className="flex items-center text-[#90E0EF]">
+                        <FaClock className="w-5 h-5 mr-2" />
+                        <span>{request.urgencyLevel}</span>
+                      </div>
+                    </div>
+                    <div className="mt-6 flex justify-end">
+                      <button className="btn-secondary">View Details</button>
+                    </div>
                   </div>
-                  <span className="px-4 py-1 rounded-full text-sm bg-[#00B4D8]/20 text-[#CAF0F8]">
-                    Pending
-                  </span>
-                </div>
-                
-                <div className="space-y-4">
-                  <div className="flex items-center text-[#90E0EF]">
-                    <FaBox className="w-5 h-5 mr-2" />
-                    <span>Winter Clothing Set</span>
-                  </div>
-                  <div className="flex items-center text-[#90E0EF]">
-                    <FaMapMarkerAlt className="w-5 h-5 mr-2" />
-                    <span>Downtown Area</span>
-                  </div>
-                </div>
-
-                <div className="mt-6 flex justify-end">
-                  <button className="btn-secondary">
-                    View Details
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+                ))
+              )}
+            </div>
+          )}
+        </section>
 
         {/* Item Detail Modal */}
         {selectedItem && (
           <div className="fixed inset-0 bg-[#03045E]/80 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="card max-w-lg w-full mx-4 p-6">
+            <div className="card max-w-lg w-full mx-4 p-6 border border-[#00B4D8]/40 bg-[#03045E]/90 shadow-2xl">
               <div className="flex justify-between items-start mb-6">
                 <div>
-                  <h3 className="text-xl font-semibold text-[#CAF0F8] mb-2">
-                    {selectedItem.description}
-                  </h3>
-                  <span className="inline-block px-3 py-1 rounded-full text-sm bg-[#00B4D8]/20 text-[#CAF0F8]">
-                    {selectedItem.category}
-                  </span>
+                  <h3 className="text-xl font-semibold text-[#CAF0F8] mb-2">{selectedItem.description}</h3>
+                  <span className="inline-block px-3 py-1 rounded-full text-sm bg-[#00B4D8]/20 text-[#CAF0F8]">{selectedItem.category}</span>
                 </div>
-                <button
-                  onClick={() => setSelectedItem(null)}
-                  className="btn-icon"
-                >
-                  <FaTimes />
-                </button>
+                <button onClick={() => setSelectedItem(null)} className="btn-icon"><FaTimes /></button>
               </div>
-
               <div className="space-y-4 mb-6">
                 <div className="card bg-[#03045E]/40 p-4">
                   <h4 className="text-[#CAF0F8] font-medium mb-2">Item Details</h4>
@@ -679,233 +678,230 @@ const RecipientPage = () => {
                   <p className="text-[#90E0EF]">Member since: June 2025</p>
                 </div>
               </div>
-
               <div className="flex gap-4">
-                <button
-                  onClick={() => setSelectedItem(null)}
-                  className="btn-secondary flex-1"
-                >
-                  Cancel
-                </button>
-                <button className="btn-primary flex-1">
-                  Confirm Request
-                </button>
+                <button onClick={() => setSelectedItem(null)} className="btn-secondary flex-1">Cancel</button>
+                <button className="btn-primary flex-1">Confirm Request</button>
               </div>
             </div>
           </div>
         )}
 
         {/* Request Form or Success View */}
-        {selectedDonation ? (
-          <div className="bg-[#4A1D18]/40 backdrop-blur-sm p-8 rounded-xl border border-[#A64B39]">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold text-[#E7C7BC]">Track Your Donation</h2>
-              <button
-                onClick={() => setSelectedDonation(null)}
-                className="text-[#D66D55] hover:text-[#A64B39] transition-colors"
-              >
-                Back to Requests
-              </button>
-            </div>
-
-            <DonationTracker donation={selectedDonation} onStatusUpdate={updateDonationStatus} />
-
-            {/* Donation Details */}
-            <div className="mt-8 space-y-4">
-              <div className="flex items-center justify-between p-4 bg-[#4A1D18]/60 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <FaClock className="text-[#D66D55]" />
-                  <div>
-                    <p className="text-[#E7C7BC]">Last Updated</p>
-                    <p className="text-[#F7E6D5]/60 text-sm">
-                      {new Date(selectedDonation.statusHistory[selectedDonation.status]?.timestamp || selectedDonation.createdAt).toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-                {selectedDonation.status !== 'RECEIVED' && (
-                  <button
-                    onClick={() => updateDonationStatus(selectedDonation.id)}
-                    className="px-4 py-2 bg-[#D66D55] text-white rounded-lg hover:bg-[#A64B39] transition-colors"
-                  >
-                    Update Status
-                  </button>
-                )}
+        <section id="request-form" className="mt-20 mb-16">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-[#CAF0F8] mb-2">Request Support</h2>
+            <p className="text-[#90E0EF] max-w-2xl mx-auto">Fill out the form below to request the items or support you need. Our team will review and match you with available donors.</p>
+          </div>
+          {selectedDonation ? (
+            <div className="bg-[#4A1D18]/40 backdrop-blur-sm p-8 rounded-xl border border-[#A64B39]">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-semibold text-[#E7C7BC]">Track Your Donation</h2>
+                <button
+                  onClick={() => setSelectedDonation(null)}
+                  className="text-[#D66D55] hover:text-[#A64B39] transition-colors"
+                >
+                  Back to Requests
+                </button>
               </div>
 
-              <div className="p-4 bg-[#4A1D18]/60 rounded-lg">
-                <h3 className="text-[#E7C7BC] font-medium mb-2">Donation Information</h3>
-                <div className="space-y-2 text-[#F7E6D5]/80 text-sm">
-                  <p>Items: {selectedDonation.itemType}</p>
-                  <p>Quantity: {selectedDonation.quantity} items</p>
-                  <p>Delivery Address: {selectedDonation.deliveryAddress}</p>
-                  {selectedDonation.specialInstructions && (
-                    <p>Special Instructions: {selectedDonation.specialInstructions}</p>
+              <DonationTracker donation={selectedDonation} onStatusUpdate={updateDonationStatus} />
+
+              {/* Donation Details */}
+              <div className="mt-8 space-y-4">
+                <div className="flex items-center justify-between p-4 bg-[#4A1D18]/60 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <FaClock className="text-[#D66D55]" />
+                    <div>
+                      <p className="text-[#E7C7BC]">Last Updated</p>
+                      <p className="text-[#F7E6D5]/60 text-sm">
+                        {new Date(selectedDonation.statusHistory[selectedDonation.status]?.timestamp || selectedDonation.createdAt).toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                  {selectedDonation.status !== 'RECEIVED' && (
+                    <button
+                      onClick={() => updateDonationStatus(selectedDonation.id)}
+                      className="px-4 py-2 bg-[#D66D55] text-white rounded-lg hover:bg-[#A64B39] transition-colors"
+                    >
+                      Update Status
+                    </button>
                   )}
                 </div>
-              </div>
 
-              <div className="p-4 bg-[#4A1D18]/60 rounded-lg">
-                <h3 className="text-[#E7C7BC] font-medium mb-2">Status History</h3>
-                <div className="space-y-2">
-                  {Object.entries(selectedDonation.statusHistory || {}).reverse().map(([status, data]) => (
-                    <div key={status} className="flex items-start gap-2 text-sm">
-                      <div className="w-2 h-2 mt-1.5 rounded-full bg-[#D66D55]" />
-                      <div>
-                        <p className="text-[#E7C7BC]">{status.replace(/_/g, ' ').toLowerCase()}</p>
-                        <p className="text-[#F7E6D5]/60">
-                          {new Date(data.timestamp).toLocaleString()}
-                        </p>
+                <div className="p-4 bg-[#4A1D18]/60 rounded-lg">
+                  <h3 className="text-[#E7C7BC] font-medium mb-2">Donation Information</h3>
+                  <div className="space-y-2 text-[#F7E6D5]/80 text-sm">
+                    <p>Items: {selectedDonation.itemType}</p>
+                    <p>Quantity: {selectedDonation.quantity} items</p>
+                    <p>Delivery Address: {selectedDonation.deliveryAddress}</p>
+                    {selectedDonation.specialInstructions && (
+                      <p>Special Instructions: {selectedDonation.specialInstructions}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="p-4 bg-[#4A1D18]/60 rounded-lg">
+                  <h3 className="text-[#E7C7BC] font-medium mb-2">Status History</h3>
+                  <div className="space-y-2">
+                    {Object.entries(selectedDonation.statusHistory || {}).reverse().map(([status, data]) => (
+                      <div key={status} className="flex items-start gap-2 text-sm">
+                        <div className="w-2 h-2 mt-1.5 rounded-full bg-[#D66D55]" />
+                        <div>
+                          <p className="text-[#E7C7BC]">{status.replace(/_/g, ' ').toLowerCase()}</p>
+                          <p className="text-[#F7E6D5]/60">
+                            {new Date(data.timestamp).toLocaleString()}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ) : showSuccess ? (
-          <SuccessView setShowTracking={() => setSelectedDonation(activeDonations[0])} />
-        ) : (
-          <div className="bg-[#4A1D18]/40 backdrop-blur-sm p-8 rounded-xl border border-[#A64B39]">
-            <h2 className="text-2xl font-semibold text-[#E7C7BC] mb-6">Request Details</h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-[#E7C7BC] mb-2">
-                    Type of Need
-                  </label>
-                  <select
-                    name="needType"
-                    value={requestForm.needType}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 bg-[#4A1D18]/60 border border-[#A64B39] rounded-lg text-[#F7E6D5] focus:outline-none focus:ring-2 focus:ring-[#D66D55] focus:border-[#D66D55]"
-                    required
-                  >
-                    <option value="">Select type of assistance</option>
-                    <option value="food">Food Assistance</option>
-                    <option value="clothing">Clothing</option>
-                    <option value="education">Educational Support</option>
-                    <option value="medical">Medical Supplies</option>
-                    <option value="housing">Housing Support</option>
-                    <option value="other">Other</option>
-                  </select>
+          ) : showSuccess ? (
+            <SuccessView setShowTracking={() => setSelectedDonation(activeDonations[0])} />
+          ) : (
+            <div className="bg-[#4A1D18]/40 backdrop-blur-sm p-8 rounded-xl border border-[#A64B39]">
+              <h2 className="text-2xl font-semibold text-[#E7C7BC] mb-6">Request Details</h2>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-[#E7C7BC] mb-2">
+                      Type of Need
+                    </label>
+                    <select
+                      name="needType"
+                      value={requestForm.needType}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2 bg-[#4A1D18]/60 border border-[#A64B39] rounded-lg text-[#F7E6D5] focus:outline-none focus:ring-2 focus:ring-[#D66D55] focus:border-[#D66D55]"
+                      required
+                    >
+                      <option value="">Select type of assistance</option>
+                      <option value="food">Food Assistance</option>
+                      <option value="clothing">Clothing</option>
+                      <option value="education">Educational Support</option>
+                      <option value="medical">Medical Supplies</option>
+                      <option value="housing">Housing Support</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-[#E7C7BC] mb-2">
+                      Urgency Level
+                    </label>
+                    <select
+                      name="urgencyLevel"
+                      value={requestForm.urgencyLevel}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2 bg-[#4A1D18]/60 border border-[#A64B39] rounded-lg text-[#F7E6D5] focus:outline-none focus:ring-2 focus:ring-[#D66D55] focus:border-[#D66D55]"
+                      required
+                    >
+                      <option value="normal">Normal</option>
+                      <option value="urgent">Urgent</option>
+                      <option value="emergency">Emergency</option>
+                    </select>
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-[#E7C7BC] mb-2">
+                      Description of Need
+                    </label>
+                    <textarea
+                      name="description"
+                      value={requestForm.description}
+                      onChange={handleChange}
+                      rows="4"
+                      className="w-full px-4 py-2 bg-[#4A1D18]/60 border border-[#A64B39] rounded-lg text-[#F7E6D5] focus:outline-none focus:ring-2 focus:ring-[#D66D55] focus:border-[#D66D55]"
+                      placeholder="Please describe your needs in detail..."
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-[#E7C7BC] mb-2">
+                      Preferred Location
+                    </label>
+                    <input
+                      type="text"
+                      name="preferredLocation"
+                      value={requestForm.preferredLocation}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2 bg-[#4A1D18]/60 border border-[#A64B39] rounded-lg text-[#F7E6D5] focus:outline-none focus:ring-2 focus:ring-[#D66D55] focus:border-[#D66D55]"
+                      placeholder="Enter your preferred pickup/delivery location"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-[#E7C7BC] mb-2">
+                      Preferred Contact Method
+                    </label>
+                    <select
+                      name="contactMethod"
+                      value={requestForm.contactMethod}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2 bg-[#4A1D18]/60 border border-[#A64B39] rounded-lg text-[#F7E6D5] focus:outline-none focus:ring-2 focus:ring-[#D66D55] focus:border-[#D66D55]"
+                      required
+                    >
+                      <option value="email">Email</option>
+                      <option value="phone">Phone</option>
+                      <option value="app">In-App Message</option>
+                    </select>
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-[#E7C7BC] mb-2">
+                      Special Requirements (Optional)
+                    </label>
+                    <textarea
+                      name="specialRequirements"
+                      value={requestForm.specialRequirements}
+                      onChange={handleChange}
+                      rows="3"
+                      className="w-full px-4 py-2 bg-[#4A1D18]/60 border border-[#A64B39] rounded-lg text-[#F7E6D5] focus:outline-none focus:ring-2 focus:ring-[#D66D55] focus:border-[#D66D55]"
+                      placeholder="Any special requirements or considerations we should know about..."
+                    />
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-[#E7C7BC] mb-2">
-                    Urgency Level
-                  </label>
-                  <select
-                    name="urgencyLevel"
-                    value={requestForm.urgencyLevel}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 bg-[#4A1D18]/60 border border-[#A64B39] rounded-lg text-[#F7E6D5] focus:outline-none focus:ring-2 focus:ring-[#D66D55] focus:border-[#D66D55]"
-                    required
-                  >
-                    <option value="normal">Normal</option>
-                    <option value="urgent">Urgent</option>
-                    <option value="emergency">Emergency</option>
-                  </select>
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-[#E7C7BC] mb-2">
-                    Description of Need
-                  </label>
-                  <textarea
-                    name="description"
-                    value={requestForm.description}
-                    onChange={handleChange}
-                    rows="4"
-                    className="w-full px-4 py-2 bg-[#4A1D18]/60 border border-[#A64B39] rounded-lg text-[#F7E6D5] focus:outline-none focus:ring-2 focus:ring-[#D66D55] focus:border-[#D66D55]"
-                    placeholder="Please describe your needs in detail..."
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-[#E7C7BC] mb-2">
-                    Preferred Location
-                  </label>
-                  <input
-                    type="text"
-                    name="preferredLocation"
-                    value={requestForm.preferredLocation}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 bg-[#4A1D18]/60 border border-[#A64B39] rounded-lg text-[#F7E6D5] focus:outline-none focus:ring-2 focus:ring-[#D66D55] focus:border-[#D66D55]"
-                    placeholder="Enter your preferred pickup/delivery location"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-[#E7C7BC] mb-2">
-                    Preferred Contact Method
-                  </label>
-                  <select
-                    name="contactMethod"
-                    value={requestForm.contactMethod}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 bg-[#4A1D18]/60 border border-[#A64B39] rounded-lg text-[#F7E6D5] focus:outline-none focus:ring-2 focus:ring-[#D66D55] focus:border-[#D66D55]"
-                    required
-                  >
-                    <option value="email">Email</option>
-                    <option value="phone">Phone</option>
-                    <option value="app">In-App Message</option>
-                  </select>
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-[#E7C7BC] mb-2">
-                    Special Requirements (Optional)
-                  </label>
-                  <textarea
-                    name="specialRequirements"
-                    value={requestForm.specialRequirements}
-                    onChange={handleChange}
-                    rows="3"
-                    className="w-full px-4 py-2 bg-[#4A1D18]/60 border border-[#A64B39] rounded-lg text-[#F7E6D5] focus:outline-none focus:ring-2 focus:ring-[#D66D55] focus:border-[#D66D55]"
-                    placeholder="Any special requirements or considerations we should know about..."
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={isProcessing}
-                className="w-full md:w-auto px-8 py-3 bg-[#D66D55] text-white rounded-lg hover:bg-[#A64B39] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isProcessing ? (
-                  <div className="w-6 h-6 border-2 border-t-transparent border-white rounded-full animate-spin mx-auto"></div>
-                ) : (
-                  'Submit Request'
-                )}
-              </button>
-            </form>
-          </div>
-        )}
+                <button
+                  type="submit"
+                  disabled={isProcessing}
+                  className="w-full md:w-auto px-8 py-3 bg-[#D66D55] text-white rounded-lg hover:bg-[#A64B39] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isProcessing ? (
+                    <div className="w-6 h-6 border-2 border-t-transparent border-white rounded-full animate-spin mx-auto"></div>
+                  ) : (
+                    'Submit Request'
+                  )}
+                </button>
+              </form>
+            </div>
+          )}
+        </section>
 
         {/* Active Donations Section */}
         {activeDonations.length > 0 && !selectedDonation && !showSuccess && (
-          <div className="bg-[#4A1D18]/40 backdrop-blur-sm p-8 rounded-xl border border-[#A64B39]">
-            <h2 className="text-2xl font-semibold text-[#E7C7BC] mb-6">Active Donations</h2>
-            <div className="space-y-4">
-              {activeDonations.map(donation => (
-                <div key={donation.id} 
-                  className="p-4 bg-[#4A1D18]/60 rounded-lg border border-[#A64B39] hover:border-[#D66D55] transition-colors cursor-pointer"
-                  onClick={() => setSelectedDonation(donation)}
-                >
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h3 className="text-[#E7C7BC] font-medium">{donation.itemType}</h3>
-                      <p className="text-[#F7E6D5]/60 text-sm">Status: {donation.status.replace(/_/g, ' ').toLowerCase()}</p>
-                      <p className="text-[#F7E6D5]/60 text-sm">Last updated: {new Date(donation.statusHistory[donation.status]?.timestamp || donation.createdAt).toLocaleDateString()}</p>
+          <section className="mb-16">
+            <div className="bg-[#4A1D18]/40 backdrop-blur-sm p-8 rounded-xl border border-[#A64B39]">
+              <h2 className="text-2xl font-semibold text-[#E7C7BC] mb-6">Active Donations</h2>
+              <div className="space-y-4">
+                {activeDonations.map(donation => (
+                  <div key={donation.id} className="p-4 bg-[#4A1D18]/60 rounded-lg border border-[#A64B39] hover:border-[#D66D55] transition-colors cursor-pointer" onClick={() => setSelectedDonation(donation)}>
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h3 className="text-[#E7C7BC] font-medium">{donation.itemType}</h3>
+                        <p className="text-[#F7E6D5]/60 text-sm">Status: {donation.status.replace(/_/g, ' ').toLowerCase()}</p>
+                        <p className="text-[#F7E6D5]/60 text-sm">Last updated: {new Date(donation.statusHistory[donation.status]?.timestamp || donation.createdAt).toLocaleDateString()}</p>
+                      </div>
+                      <FaTruck className="text-[#D66D55]" />
                     </div>
-                    <FaTruck className="text-[#D66D55]" />
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          </section>
         )}
       </div>
     </div>
