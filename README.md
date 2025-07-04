@@ -1,4 +1,4 @@
-# Social Innovation
+# Heart2hand (Social Innovation)
 
 A modern, community-driven platform for donations, funding, and support. Built with React, Vite, and a beautiful oceanic blue theme.
 
