@@ -74,7 +74,16 @@ export const AuthProvider = ({ children }) => {
       throw new Error('No user is logged in');
     }
 
-    // Allow switching to any valid user type
+    // Recipients cannot switch roles
+    if (user.userType === 'recipient') {
+      throw new Error('Recipients cannot change their role');
+    }
+
+    // Donors and funders can only switch between each other
+    if (user.userType !== 'recipient' && newType === 'recipient') {
+      throw new Error('Donors and funders cannot become recipients');
+    }
+
     if (!['donor', 'funder', 'recipient'].includes(newType)) {
       throw new Error('Invalid user type');
     }

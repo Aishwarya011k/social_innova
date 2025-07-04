@@ -52,6 +52,15 @@ const ServiceCard = ({ icon: Icon, title, description, features, link, requiresA
   const [isHovered, setIsHovered] = useState(false);
 
   const handleClick = () => {
+    // Recipients cannot switch to donor/funder, donors/funders cannot switch to recipient
+    if (user && user.userType === 'recipient' && userType !== 'recipient') {
+      // Show error or do nothing
+      return;
+    }
+    if (user && (user.userType === 'donor' || user.userType === 'funder') && userType === 'recipient') {
+      // Show error or do nothing
+      return;
+    }
     if (!requiresAuth || (user && user.userType === userType)) {
       navigate(link);
     } else if (user) {
@@ -112,6 +121,9 @@ const ServiceCard = ({ icon: Icon, title, description, features, link, requiresA
         <TypeConfirmModal
           userType={userType}
           onConfirm={() => {
+            // Only allow valid switches
+            if (user.userType === 'recipient' && userType !== 'recipient') return;
+            if ((user.userType === 'donor' || user.userType === 'funder') && userType === 'recipient') return;
             updateUserType(userType);
             setShowTypeConfirm(false);
             navigate(link);

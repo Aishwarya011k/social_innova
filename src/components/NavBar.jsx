@@ -77,33 +77,31 @@ export default function Navbar() {
                         Edit Profile
                       </Link>
                       <hr className="border-[#00B4D8]/20 my-1" />
-                      <button
-                        onClick={() => {
-                          updateUserType('donor');
-                          setUserMenuOpen(false);
-                        }}
-                        className="block w-full text-left px-4 py-2 text-sm text-[#CAF0F8] hover:bg-[#0077B6]"
-                      >
-                        Switch to Donor
-                      </button>
-                      <button
-                        onClick={() => {
-                          updateUserType('funder');
-                          setUserMenuOpen(false);
-                        }}
-                        className="block w-full text-left px-4 py-2 text-sm text-[#CAF0F8] hover:bg-[#0077B6]"
-                      >
-                        Switch to Funder
-                      </button>
-                      <button
-                        onClick={() => {
-                          updateUserType('recipient');
-                          setUserMenuOpen(false);
-                        }}
-                        className="block w-full text-left px-4 py-2 text-sm text-[#CAF0F8] hover:bg-[#0077B6]"
-                      >
-                        Switch to Recipient
-                      </button>
+                      {/* Only show switch options if not recipient */}
+                      {user.userType !== 'recipient' && (
+                        <>
+                          <button
+                            onClick={() => {
+                              updateUserType('donor');
+                              setUserMenuOpen(false);
+                            }}
+                            className="block w-full text-left px-4 py-2 text-sm text-[#CAF0F8] hover:bg-[#0077B6]"
+                          >
+                            Switch to Donor
+                          </button>
+                          <button
+                            onClick={() => {
+                              updateUserType('funder');
+                              setUserMenuOpen(false);
+                            }}
+                            className="block w-full text-left px-4 py-2 text-sm text-[#CAF0F8] hover:bg-[#0077B6]"
+                          >
+                            Switch to Funder
+                          </button>
+                        </>
+                      )}
+                      {/* Only show switch to recipient if donor or funder (but logic blocks it) */}
+                      {/* <button ...>Switch to Recipient</button> intentionally omitted */}
                       <hr className="border-[#00B4D8]/20 my-1" />
                       <button
                         onClick={() => {
