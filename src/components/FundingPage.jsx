@@ -29,7 +29,6 @@ const FundingCard = ({ icon: Icon, title, description }) => (
 const FundingForm = () => {
   const { user } = useAuth();
   const [formData, setFormData] = useState({
-    projectName: '',
     fundingAmount: '',
     projectCategory: '',
     description: '',
@@ -46,8 +45,8 @@ const FundingForm = () => {
     setIsSubmitting(true);
     setEmailError(false);
 
-    // Validate required fields (optional, for robustness)
-    if (!formData.projectName || !formData.fundingAmount || !formData.projectCategory || !formData.description || !formData.timeline || !formData.paymentMethod) {
+    // Validate required fields (projectName removed)
+    if (!formData.fundingAmount || !formData.projectCategory || !formData.description || !formData.timeline || !formData.paymentMethod) {
       setIsSubmitting(false);
       return;
     }
@@ -94,7 +93,6 @@ const FundingForm = () => {
     setTimeout(() => {
       setShowSuccess(false);
       setFormData({
-        projectName: '',
         fundingAmount: '',
         projectCategory: '',
         description: '',
@@ -128,22 +126,6 @@ const FundingForm = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-[#CAF0F8] text-sm font-medium mb-2" htmlFor="projectName">
-            Project Name
-          </label>
-          <input
-            type="text"
-            id="projectName"
-            name="projectName"
-            value={formData.projectName}
-            onChange={handleChange}
-            required
-            className="w-full bg-[#03045E]/30 border border-[#00B4D8]/30 rounded-lg px-4 py-2 text-[#CAF0F8] placeholder-[#90E0EF]/50 focus:outline-none focus:border-[#00B4D8]"
-            placeholder="Enter project name"
-          />
-        </div>
-
         <div>
           <label className="block text-[#CAF0F8] text-sm font-medium mb-2" htmlFor="fundingAmount">
             Funding Amount ($)
