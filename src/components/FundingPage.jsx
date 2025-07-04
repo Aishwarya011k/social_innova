@@ -10,6 +10,7 @@ import {
   FaStar,
   FaRegCreditCard
 } from 'react-icons/fa';
+import emailjs from 'emailjs-com';
 
 const FundingCard = ({ icon: Icon, title, description }) => (
   <div className="bg-[#03045E]/30 backdrop-blur-sm p-6 rounded-xl border border-[#00B4D8]/30 hover:border-[#00B4D8] transition-all">
@@ -26,6 +27,7 @@ const FundingCard = ({ icon: Icon, title, description }) => (
 );
 
 const FundingForm = () => {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     projectName: '',
     fundingAmount: '',
@@ -37,17 +39,57 @@ const FundingForm = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [emailError, setEmailError] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
+    setEmailError(false);
+
+    // Validate required fields (optional, for robustness)
+    if (!formData.projectName || !formData.fundingAmount || !formData.projectCategory || !formData.description || !formData.timeline || !formData.paymentMethod) {
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Email is compulsory for funding
+    if (!user?.email) {
+      setIsSubmitting(false);
+      setEmailError(true);
+      return;
+    }
+
+    // Save funding data to localStorage
+    const funding = {
+      ...formData,
+      userId: user?.id,
+      userEmail: user?.email,
+      createdAt: new Date().toISOString(),
+    };
+    const key = `fundings_${user?.id}`;
+    const prev = JSON.parse(localStorage.getItem(key) || '[]');
+    localStorage.setItem(key, JSON.stringify([funding, ...prev]));
+
+    // Send confirmation email via EmailJS if email is present
+    if (user?.email) {
+      try {
+        await emailjs.send(
+          'service_wtrosdm',
+          'template_k0yo6uc',
+          {
+            to_email: user?.email,
+            to_name: user?.name || user?.email,
+          },
+          'zSMQbdDSAnIxY3lWn'
+        );
+      } catch (err) {
+        // Optionally handle email error
+      }
+    }
+
     setIsSubmitting(false);
     setShowSuccess(true);
-    
+
     // Reset form after 3 seconds
     setTimeout(() => {
       setShowSuccess(false);
@@ -162,22 +204,6 @@ const FundingForm = () => {
           </select>
         </div>
 
-        <div className="md:col-span-2">
-          <label className="block text-[#CAF0F8] text-sm font-medium mb-2" htmlFor="description">
-            Project Description
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-            rows="4"
-            className="w-full bg-[#03045E]/30 border border-[#00B4D8]/30 rounded-lg px-4 py-2 text-[#CAF0F8] placeholder-[#90E0EF]/50 focus:outline-none focus:border-[#00B4D8]"
-            placeholder="Describe the project and its impact"
-          />
-        </div>
-
         <div>
           <label className="block text-[#CAF0F8] text-sm font-medium mb-2" htmlFor="paymentMethod">
             Payment Method
@@ -237,6 +263,9 @@ const FundingForm = () => {
           )}
         </button>
       </div>
+      {emailError && (
+        <div className="text-red-400 text-center mt-2">Email is required to submit funding. Please update your profile with a valid email.</div>
+      )}
     </form>
   );
 };

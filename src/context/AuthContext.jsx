@@ -13,6 +13,9 @@ export const AuthProvider = ({ children }) => {
       throw new Error('Please fill in all required fields');
     }
 
+    // Donor/funder require email verification
+    const needsVerification = userType === 'donor' || userType === 'funder';
+
     const mockUser = {
       id: Date.now().toString(),
       email: email,
@@ -25,7 +28,7 @@ export const AuthProvider = ({ children }) => {
       memberSince: new Date().toISOString(),
       donationsCount: 0,
       donationStreak: 0,
-      isVerified: true
+      isVerified: !needsVerification, // false for donor/funder, true for recipient
     };
 
     setUser(mockUser);
@@ -43,6 +46,10 @@ export const AuthProvider = ({ children }) => {
     if (savedUser) {
       const parsedUser = JSON.parse(savedUser);
       if (parsedUser.email === email) {
+        // Block login for unverified donor/funder
+        if ((parsedUser.userType === 'donor' || parsedUser.userType === 'funder') && !parsedUser.isVerified) {
+          throw new Error('Please verify your email before logging in.');
+        }
         setUser(parsedUser);
         return parsedUser;
       }

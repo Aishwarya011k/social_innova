@@ -40,8 +40,13 @@ const SignUp = () => {
 
     try {
       setLoading(true);
-      await signup(formData);
-      navigate('/dashboard');
+      const newUser = await signup(formData);
+      // If donor/funder, redirect to verify email
+      if ((newUser.userType === 'donor' || newUser.userType === 'funder') && !newUser.isVerified) {
+        navigate('/verify-email');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       setError(err.message || 'Failed to create account.');
     } finally {

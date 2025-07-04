@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { FaBox, FaCalendarAlt, FaMapMarkerAlt, FaTruck, FaHandHoldingHeart, FaCheckCircle, FaClock, FaMapMarked, FaCamera, FaTag } from 'react-icons/fa';
+import emailjs from 'emailjs-com';
 
 const DonationCard = ({ icon: Icon, title, description }) => (
   <div className="bg-[#4A1D18]/40 backdrop-blur-sm p-6 rounded-xl border border-[#A64B39] hover:border-[#D66D55] transition-all">
@@ -106,6 +107,7 @@ const TrackingTimeline = ({ donation, onStatusUpdate }) => {
 };
 
 const DonationForm = () => {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     itemName: '',
     category: '',
@@ -122,14 +124,43 @@ const DonationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
+
+    // Validate required fields (optional, for robustness)
+    if (!formData.itemName || !formData.category || !formData.description || !formData.condition || !formData.quantity || !formData.pickupAddress || !formData.preferredPickupDate || !user?.email) {
+      setIsSubmitting(false);
+      alert('Please fill in all required fields, including your email.');
+      return;
+    }
+
+    // Save donation data to localStorage
+    const donation = {
+      ...formData,
+      userId: user?.id,
+      userEmail: user?.email,
+      createdAt: new Date().toISOString(),
+    };
+    const key = `donations_${user?.id}`;
+    const prev = JSON.parse(localStorage.getItem(key) || '[]');
+    localStorage.setItem(key, JSON.stringify([donation, ...prev]));
+
+    // Send confirmation email via EmailJS
+    try {
+      await emailjs.send(
+        'service_wtrosdm',
+        'template_k0yo6uc',
+        {
+          name: user?.name || user?.email,
+          email: user?.email,
+        },
+        'zSMQbdDSAnIxY3lWn'
+      );
+    } catch (err) {
+      // Optionally handle email error
+    }
+
     setIsSubmitting(false);
     setShowSuccess(true);
-    
-    // Reset form after 3 seconds
+
     setTimeout(() => {
       setShowSuccess(false);
       setFormData({
